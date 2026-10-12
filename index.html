@@ -12,10 +12,6 @@
         :root {
             --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             --bg-light: #f4f6f9;
-            --sidebar-dark: #1e1e2f;
-            --success-color: #05c46b;
-            --error-color: #fc5c65;
-            --info-color: #4b7bec;
         }
         body {
             background-color: var(--bg-light);
@@ -35,13 +31,6 @@
         .card-capsule {
             border-radius: 30px;
         }
-        .card-panel {
-            border-radius: 15px;
-        }
-        /* Custom Modal Backdrop */
-        #custom-modal {
-            backdrop-filter: blur(4px);
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -52,120 +41,126 @@
             <i class="fa-solid fa-graduation-cap text-2xl"></i>
             <h1 class="text-xl font-bold tracking-wide">FAHM Alumni Portal</h1>
         </div>
-        <div id="nav-actions" class="flex items-center space-x-4">
-            <!-- Dynamically populated Logout / Auth state -->
-        </div>
+        <div id="nav-actions"></div>
     </nav>
 
     <!-- Main Container -->
-    <main class="flex-grow container mx-auto p-4 md:p-6 max-w-2xl flex items-center justify-center">
+    <main class="flex-grow container mx-auto p-4 md:p-6 max-w-4xl flex items-center justify-center">
         
-        <!-- Registration Section -->
-        <div id="register-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl w-full border border-gray-100">
-            <div class="flex items-center space-x-3 mb-6">
-                <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
-                    <i class="fa-solid fa-user-plus"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Alumni Registration</h2>
-                    <p class="text-sm text-gray-500">Join the Federation of Alumni of Al Hasanath Mampuzha</p>
-                </div>
-            </div>
-
-            <form id="register-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-user"></i></span>
-                        <input type="text" id="reg-name" required placeholder="Enter your full name" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+        <!-- Auth Container (Login / Register) -->
+        <div id="auth-container" class="w-full max-w-md">
+            
+            <!-- Login Form (Default View) -->
+            <div id="login-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl border border-gray-100">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Portal Login</h2>
+                        <p class="text-sm text-gray-500">Sign in as User or Admin</p>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Mobile Number</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-phone"></i></span>
-                        <input type="tel" id="reg-phone" required placeholder="Enter mobile number" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="login-email" required placeholder="Enter your email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
                     </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-envelope"></i></span>
-                        <input type="email" id="reg-email" required placeholder="Enter email address" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" id="reg-pass1" required placeholder="Password" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
-                        </div>
+                        <input type="password" id="login-password" required placeholder="Enter your password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                    </div>
+                    <button type="submit" class="w-full mt-4 py-3.5 theme-gradient text-white font-semibold btn-capsule shadow-lg">Login</button>
+                </form>
+                
+                <div class="mt-6 text-center border-t pt-4">
+                    <p class="text-sm text-gray-600">
+                        Don't have an account? 
+                        <button id="show-register" class="text-[#2a5298] font-bold hover:underline ml-1">Register Here</button>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Registration Form (Hidden initially) -->
+            <div id="register-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl border border-gray-100 hidden">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
+                        <i class="fa-solid fa-user-plus"></i>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" id="reg-pass2" required placeholder="Re-enter password" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
-                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Alumni Registration</h2>
+                        <p class="text-sm text-gray-500">Join FAHM Portal</p>
                     </div>
                 </div>
 
-                <button type="submit" class="w-full mt-6 py-3.5 theme-gradient text-white font-semibold btn-capsule shadow-lg flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-check-circle"></i>
-                    <span>Register Now</span>
-                </button>
-            </form>
+                <form id="register-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="Enter full name" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Mobile Number</label>
+                        <input type="tel" id="reg-phone" required placeholder="Enter mobile number" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="reg-email" required placeholder="Enter email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="password" id="reg-pass1" required placeholder="Password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none">
+                        <input type="password" id="reg-pass2" required placeholder="Confirm" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full mt-4 py-3.5 theme-gradient text-white font-semibold btn-capsule shadow-lg">Register</button>
+                </form>
+
+                <div class="mt-6 text-center border-t pt-4">
+                    <p class="text-sm text-gray-600">
+                        Already registered? 
+                        <button id="show-login" class="text-[#2a5298] font-bold hover:underline ml-1">Login Here</button>
+                    </p>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Dashboard View (Initially Hidden) -->
-        <div id="dashboard-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl w-full hidden border border-gray-100">
-            <div class="flex items-center space-x-3 mb-6">
-                <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
-                    <i class="fa-solid fa-id-card"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Alumni Dashboard</h2>
-                    <p id="welcome-user-text" class="text-sm text-gray-500">Welcome back!</p>
-                </div>
+        <!-- User Pending Dashboard -->
+        <div id="user-dashboard" class="bg-white p-6 md:p-8 card-capsule shadow-xl w-full hidden border border-gray-100 max-w-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Alumni Dashboard</h2>
+            <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6">
+                <h4 class="font-semibold text-amber-900">Account Status: Pending Approval</h4>
+                <p class="text-sm text-amber-700 mt-1">Your registration is under review by the administrator.</p>
             </div>
+            <button id="user-logout-btn" class="w-full py-3 bg-rose-500 text-white font-semibold btn-capsule">Logout</button>
+        </div>
 
-            <div class="bg-blue-50 border border-blue-200 p-4 card-panel mb-6 flex items-start space-x-3">
-                <i class="fa-solid fa-circle-info text-[#4b7bec] text-xl mt-0.5"></i>
-                <div>
-                    <h4 class="font-semibold text-blue-900">Account Status: Pending Approval</h4>
-                    <p class="text-sm text-blue-700 mt-1">Your registration is currently under review by the administrator. Once approved, full portal access will be granted.</p>
-                </div>
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="bg-white p-6 md:p-8 card-capsule shadow-xl w-full hidden border border-gray-100">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Admin Panel - Pending Approvals</h2>
+                <button id="admin-logout-btn" class="px-5 py-2 bg-rose-500 text-white text-sm font-semibold btn-capsule">Logout</button>
             </div>
-
-            <button id="logout-btn" class="w-full py-3.5 bg-rose-500 text-white font-semibold btn-capsule shadow-lg hover:bg-rose-600 transition flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Logout</span>
-            </button>
+            <div id="pending-users-list" class="space-y-3">
+                <p class="text-gray-500 text-sm">Loading requests...</p>
+            </div>
         </div>
 
     </main>
 
-    <!-- Custom App-Native Modal / Toast Container -->
+    <!-- Custom Modal -->
     <div id="custom-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-[30px] p-6 max-w-sm w-full shadow-2xl text-center transform transition-all scale-95 opacity-0 duration-300" id="modal-box">
-            <div id="modal-icon-container" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl text-white mb-4 shadow-md">
-                <!-- Dynamic Icon -->
-            </div>
+        <div class="bg-white rounded-[30px] p-6 max-w-sm w-full shadow-2xl text-center">
             <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-2">Notification</h3>
-            <p id="modal-message" class="text-gray-600 text-sm mb-6 leading-relaxed">Message here...</p>
-            <button id="modal-close-btn" class="w-full py-3 theme-gradient text-white font-semibold btn-capsule shadow-md">OK</button>
+            <p id="modal-message" class="text-gray-600 text-sm mb-6">Message...</p>
+            <button id="modal-close-btn" class="w-full py-3 theme-gradient text-white font-semibold btn-capsule">OK</button>
         </div>
     </div>
 
-    <!-- Firebase SDKs & Application Logic -->
+    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDdJYaS0lNbedp_C_ks-BSNxAT4BubK8N8",
@@ -181,72 +176,39 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Custom Modal UI Handler
-        function showModal(title, message, type = 'success', callback = null) {
+        function showModal(title, message, callback = null) {
             const modal = document.getElementById('custom-modal');
-            const modalBox = document.getElementById('modal-box');
-            const iconContainer = document.getElementById('modal-icon-container');
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-message').innerText = message;
-
-            if (type === 'success') {
-                iconContainer.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl text-white mb-4 shadow-md bg-[#05c46b]';
-                iconContainer.innerHTML = '<i class="fa-solid fa-check"></i>';
-            } else {
-                iconContainer.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl text-white mb-4 shadow-md bg-[#fc5c65]';
-                iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-            }
-
             modal.classList.remove('hidden');
-            setTimeout(() => {
-                modalBox.classList.remove('scale-95', 'opacity-0');
-                modalBox.classList.add('scale-100', 'opacity-100');
-            }, 10);
-
             const closeBtn = document.getElementById('modal-close-btn');
-            // Remove previous event listeners
             const newBtn = closeBtn.cloneNode(true);
             closeBtn.parentNode.replaceChild(newBtn, closeBtn);
-
             newBtn.addEventListener('click', () => {
-                modalBox.classList.remove('scale-100', 'opacity-100');
-                modalBox.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    if (callback) callback();
-                }, 200);
+                modal.classList.add('hidden');
+                if (callback) callback();
             });
         }
 
-        // Advanced Keyboard Navigation (Enter key mimics Tab key)
-        document.querySelectorAll('form input').forEach((input, index, inputs) => {
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && input.type !== 'submit') {
-                    e.preventDefault();
-                    const nextInput = inputs[index + 1];
-                    if (nextInput) {
-                        nextInput.focus();
-                    }
-                }
-            });
+        // Toggle between Login and Register views
+        document.getElementById('show-register').addEventListener('click', () => {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('register-section').classList.remove('hidden');
+        });
+        document.getElementById('show-login').addEventListener('click', () => {
+            document.getElementById('register-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
         });
 
-        // Session Persistence & Auth State Observer
-        onAuthStateChanged(auth, async (user) => {
-            const regSection = document.getElementById('register-section');
-            const dashSection = document.getElementById('dashboard-section');
-            const navActions = document.getElementById('nav-actions');
-
-            if (user) {
-                localStorage.setItem('fahm_authenticated', 'true');
-                regSection.classList.add('hidden');
-                dashSection.classList.remove('hidden');
-                navActions.innerHTML = `<span class="text-sm bg-white/10 px-3 py-1 rounded-full"><i class="fa-solid fa-user-circle mr-1"></i> ${user.email}</span>`;
-            } else {
-                localStorage.removeItem('fahm_authenticated');
-                dashSection.classList.add('hidden');
-                regSection.classList.remove('hidden');
-                navActions.innerHTML = '';
+        // Login Handler (Works for both Admin and Users)
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (error) {
+                showModal('Login Failed', error.message);
             }
         });
 
@@ -260,46 +222,91 @@
             const pass2 = document.getElementById('reg-pass2').value;
 
             if (pass1 !== pass2) {
-                showModal('Password Mismatch', 'Entered passwords do not match. Please check and try again.', 'error');
+                showModal('Error', 'Passwords do not match!');
                 return;
             }
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, pass1);
-                const user = userCredential.user;
-
-                await setDoc(doc(db, "users", user.uid), {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    status: "pending",
-                    role: "user",
-                    createdAt: new Date()
+                const cred = await createUserWithEmailAndPassword(auth, email, pass1);
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    name, email, phone, status: "pending", role: "user", createdAt: new Date()
                 });
-
-                showModal('Registration Successful', 'Your account has been successfully created and is pending administrator approval.', 'success', () => {
+                showModal('Success', 'Registered successfully! Please login once approved.', () => {
                     document.getElementById('register-form').reset();
+                    document.getElementById('register-section').classList.add('hidden');
+                    document.getElementById('login-section').classList.remove('hidden');
                 });
             } catch (error) {
-                showModal('Registration Failed', error.message, 'error');
+                showModal('Error', error.message);
             }
         });
 
-        // Explicit Logout Handling with Instant Redirect
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            try {
-                localStorage.removeItem('fahm_authenticated');
-                sessionStorage.clear();
-                await signOut(auth);
-                // Instant UI state switch without manual reload
-                document.getElementById('dashboard-section').classList.add('hidden');
-                document.getElementById('register-section').classList.remove('hidden');
-                document.getElementById('nav-actions').innerHTML = '';
-                showModal('Logged Out', 'You have been securely logged out of your session.', 'success');
-            } catch (error) {
-                showModal('Logout Error', error.message, 'error');
+        // Auth State & Panel Routing
+        onAuthStateChanged(auth, async (user) => {
+            const authContainer = document.getElementById('auth-container');
+            const userDash = document.getElementById('user-dashboard');
+            const adminDash = document.getElementById('admin-dashboard');
+
+            if (user) {
+                authContainer.classList.add('hidden');
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().role === 'admin') {
+                    adminDash.classList.remove('hidden');
+                    loadPendingUsers();
+                } else {
+                    userDash.classList.remove('hidden');
+                }
+            } else {
+                adminDash.classList.add('hidden');
+                userDash.classList.add('hidden');
+                authContainer.classList.remove('hidden');
             }
         });
+
+        // Load Pending Users in Admin Panel
+        async function loadPendingUsers() {
+            const listContainer = document.getElementById('pending-users-list');
+            listContainer.innerHTML = '<p class="text-gray-500 text-sm">Loading requests...</p>';
+            
+            const querySnapshot = await getDocs(collection(db, "users"));
+            listContainer.innerHTML = '';
+            let count = 0;
+
+            querySnapshot.forEach((document) => {
+                const data = document.data();
+                if (data.status === 'pending' && data.role !== 'admin') {
+                    count++;
+                    const div = document.createElement('div');
+                    div.className = 'bg-gray-50 p-4 border rounded-xl flex justify-between items-center';
+                    div.innerHTML = `
+                        <div>
+                            <h4 class="font-bold text-gray-800">${data.name}</h4>
+                            <p class="text-xs text-gray-500">${data.email} | ${data.phone}</p>
+                        </div>
+                        <button onclick="approveUser('${document.id}', '${data.name}', '${data.phone}')" class="px-4 py-2 bg-[#05c46b] text-white text-xs font-bold btn-capsule">Approve & WhatsApp</button>
+                    `;
+                    listContainer.appendChild(div);
+                }
+            });
+
+            if (count === 0) {
+                listContainer.innerHTML = '<p class="text-gray-500 text-sm">No pending approval requests found.</p>';
+            }
+        }
+
+        window.approveUser = async function(userId, name, phone) {
+            try {
+                await updateDoc(doc(db, "users", userId), { status: 'approved' });
+                showModal('Approved', `Successfully approved ${name}!`, () => loadPendingUsers());
+                const msg = encodeURIComponent(`Hello ${name}, your registration for FAHM Alumni Portal has been approved!`);
+                window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+            } catch (error) {
+                showModal('Error', error.message);
+            }
+        };
+
+        document.getElementById('user-logout-btn').addEventListener('click', () => signOut(auth));
+        document.getElementById('admin-logout-btn').addEventListener('click', () => signOut(auth));
     </script>
 </body>
 </html>
