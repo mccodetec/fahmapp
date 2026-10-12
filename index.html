@@ -41,7 +41,6 @@
             <i class="fa-solid fa-graduation-cap text-2xl"></i>
             <h1 class="text-xl font-bold tracking-wide">FAHM Alumni Portal</h1>
         </div>
-        <div id="nav-actions"></div>
     </nav>
 
     <!-- Main Container -->
@@ -77,7 +76,7 @@
                 <div class="mt-6 text-center border-t pt-4">
                     <p class="text-sm text-gray-600">
                         Don't have an account? 
-                        <button id="show-register" class="text-[#2a5298] font-bold hover:underline ml-1">Register Here</button>
+                        <button type="button" id="show-register" class="text-[#2a5298] font-bold hover:underline ml-1">Register Here</button>
                     </p>
                 </div>
             </div>
@@ -117,7 +116,7 @@
                 <div class="mt-6 text-center border-t pt-4">
                     <p class="text-sm text-gray-600">
                         Already registered? 
-                        <button id="show-login" class="text-[#2a5298] font-bold hover:underline ml-1">Login Here</button>
+                        <button type="button" id="show-login" class="text-[#2a5298] font-bold hover:underline ml-1">Login Here</button>
                     </p>
                 </div>
             </div>
@@ -200,7 +199,7 @@
             document.getElementById('login-section').classList.remove('hidden');
         });
 
-        // Login Handler (Works for both Admin and Users)
+        // Login Handler
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -249,11 +248,16 @@
 
             if (user) {
                 authContainer.classList.add('hidden');
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists() && userDoc.data().role === 'admin') {
-                    adminDash.classList.remove('hidden');
-                    loadPendingUsers();
-                } else {
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists() && userDoc.data().role === 'admin') {
+                        adminDash.classList.remove('hidden');
+                        loadPendingUsers();
+                    } else {
+                        userDash.classList.remove('hidden');
+                    }
+                } catch (err) {
+                    console.error(err);
                     userDash.classList.remove('hidden');
                 }
             } else {
@@ -268,29 +272,33 @@
             const listContainer = document.getElementById('pending-users-list');
             listContainer.innerHTML = '<p class="text-gray-500 text-sm">Loading requests...</p>';
             
-            const querySnapshot = await getDocs(collection(db, "users"));
-            listContainer.innerHTML = '';
-            let count = 0;
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                listContainer.innerHTML = '';
+                let count = 0;
 
-            querySnapshot.forEach((document) => {
-                const data = document.data();
-                if (data.status === 'pending' && data.role !== 'admin') {
-                    count++;
-                    const div = document.createElement('div');
-                    div.className = 'bg-gray-50 p-4 border rounded-xl flex justify-between items-center';
-                    div.innerHTML = `
-                        <div>
-                            <h4 class="font-bold text-gray-800">${data.name}</h4>
-                            <p class="text-xs text-gray-500">${data.email} | ${data.phone}</p>
-                        </div>
-                        <button onclick="approveUser('${document.id}', '${data.name}', '${data.phone}')" class="px-4 py-2 bg-[#05c46b] text-white text-xs font-bold btn-capsule">Approve & WhatsApp</button>
-                    `;
-                    listContainer.appendChild(div);
+                querySnapshot.forEach((document) => {
+                    const data = document.data();
+                    if (data.status === 'pending' && data.role !== 'admin') {
+                        count++;
+                        const div = document.createElement('div');
+                        div.className = 'bg-gray-50 p-4 border rounded-xl flex justify-between items-center';
+                        div.innerHTML = `
+                            <div>
+                                <h4 class="font-bold text-gray-800">${data.name}</h4>
+                                <p class="text-xs text-gray-500">${data.email} | ${data.phone}</p>
+                            </div>
+                            <button onclick="approveUser('${document.id}', '${data.name}', '${data.phone}')" class="px-4 py-2 bg-[#05c46b] text-white text-xs font-bold btn-capsule">Approve & WhatsApp</button>
+                        `;
+                        listContainer.appendChild(div);
+                    }
+                });
+
+                if (count === 0) {
+                    listContainer.innerHTML = '<p class="text-gray-500 text-sm">No pending approval requests found.</p>';
                 }
-            });
-
-            if (count === 0) {
-                listContainer.innerHTML = '<p class="text-gray-500 text-sm">No pending approval requests found.</p>';
+            } catch (error) {
+                listContainer.innerHTML = `<p class="text-red-500 text-sm">Error loading data: ${error.message}</p>`;
             }
         }
 
