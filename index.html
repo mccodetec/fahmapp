@@ -46,42 +46,23 @@
             </form>
         </div>
 
-        <!-- Profile Update Section (Hidden initially) -->
-        <div id="profile-section" class="bg-white p-6 rounded-lg shadow-md hidden">
-            <h2 class="text-2xl font-bold mb-4 text-emerald-800">പ്രൊഫൈൽ അപ്ഡേറ്റ്</h2>
-            <form id="profile-form" class="space-y-4">
-                <div>
-                    <label class="block text-gray-700">ഇറങ്ങിയ വർഷം (Batch)</label>
-                    <input type="text" id="prof-batch" required class="w-full p-2 border rounded mt-1">
-                </div>
-                <div>
-                    <label class="block text-gray-700">നിലവിലെ ജോലി / പ്രൊഫഷൻ</label>
-                    <input type="text" id="prof-job" required class="w-full p-2 border rounded mt-1">
-                </div>
-                <div>
-                    <label class="block text-gray-700">സ്ഥാപനം / സ്ഥലം</label>
-                    <input type="text" id="prof-workplace" required class="w-full p-2 border rounded mt-1">
-                </div>
-                <button type="submit" class="w-full bg-emerald-700 text-white p-2 rounded hover:bg-emerald-800">പ്രൊഫൈൽ സേവ് ചെയ്യുക</button>
-            </form>
-        </div>
-
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs & App Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // നിങ്ങളുടെ ഫയർബേസ് കോൺഫിഗറേഷൻ ഇവിടെ നൽകുക
+        // നിങ്ങളുടെ ഒറിജിനൽ ഫയർബേസ് കോൺഫിഗറേഷൻ
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDdJYaS0lNbedp_C_ks-BSNxAT4BubK8N8",
+            authDomain: "fahmapp.firebaseapp.com",
+            projectId: "fahmapp",
+            storageBucket: "fahmapp.firebasestorage.app",
+            messagingSenderId: "562218275568",
+            appId: "1:562218275568:web:7d0af8bb82326ac0e5e835",
+            measurementId: "G-C9YHBGK351"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -103,11 +84,9 @@
             }
 
             try {
-                // Firebase Auth വഴി യൂസറെ ക്രിയേറ്റ് ചെയ്യുക
                 const userCredential = await createUserWithEmailAndPassword(auth, email, pass1);
                 const user = userCredential.user;
 
-                // Firestore-ൽ യൂസർ ഡാറ്റ സേവ് ചെയ്യുക (Status: Pending)
                 await setDoc(doc(db, "users", user.uid), {
                     name: name,
                     email: email,
