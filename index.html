@@ -1,60 +1,172 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAHM - Federation of Alumni of Al Hasanath Mampuzha</title>
+    <title>FAHM Alumni Portal</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --bg-light: #f4f6f9;
+            --sidebar-dark: #1e1e2f;
+            --success-color: #05c46b;
+            --error-color: #fc5c65;
+            --info-color: #4b7bec;
+        }
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .theme-gradient {
+            background: var(--primary-gradient);
+        }
+        .btn-capsule {
+            border-radius: 50px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-capsule:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .card-capsule {
+            border-radius: 30px;
+        }
+        .card-panel {
+            border-radius: 15px;
+        }
+        /* Custom Modal Backdrop */
+        #custom-modal {
+            backdrop-filter: blur(4px);
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="min-h-screen flex flex-col">
 
-    <!-- Navbar -->
-    <nav class="bg-emerald-800 text-white p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">FAHM Alumni Portal</h1>
-            <div id="nav-auth" class="space-x-4">
-                <!-- Dynamic Auth Buttons -->
-            </div>
+    <!-- Top Navigation Bar -->
+    <nav class="theme-gradient text-white p-4 shadow-md flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <i class="fa-solid fa-graduation-cap text-2xl"></i>
+            <h1 class="text-xl font-bold tracking-wide">FAHM Alumni Portal</h1>
+        </div>
+        <div id="nav-actions" class="flex items-center space-x-4">
+            <!-- Dynamically populated Logout / Auth state -->
         </div>
     </nav>
 
     <!-- Main Container -->
-    <div class="container mx-auto p-4 mt-6 max-w-2xl">
+    <main class="flex-grow container mx-auto p-4 md:p-6 max-w-2xl flex items-center justify-center">
         
-        <!-- Registration Form -->
-        <div id="register-section" class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold mb-4 text-emerald-800">അലുമ്നി രജിസ്ട്രേഷൻ</h2>
+        <!-- Registration Section -->
+        <div id="register-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl w-full border border-gray-100">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Alumni Registration</h2>
+                    <p class="text-sm text-gray-500">Join the Federation of Alumni of Al Hasanath Mampuzha</p>
+                </div>
+            </div>
+
             <form id="register-form" class="space-y-4">
                 <div>
-                    <label class="block text-gray-700">പൂർണ്ണമായ പേര്</label>
-                    <input type="text" id="reg-name" required class="w-full p-2 border rounded mt-1">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="reg-name" required placeholder="Enter your full name" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                    </div>
                 </div>
+
                 <div>
-                    <label class="block text-gray-700">മൊബൈൽ നമ്പർ</label>
-                    <input type="tel" id="reg-phone" required class="w-full p-2 border rounded mt-1">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Mobile Number</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-phone"></i></span>
+                        <input type="tel" id="reg-phone" required placeholder="Enter mobile number" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                    </div>
                 </div>
+
                 <div>
-                    <label class="block text-gray-700">ഇമെയിൽ വിലാസം</label>
-                    <input type="email" id="reg-email" required class="w-full p-2 border rounded mt-1">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="email" id="reg-email" required placeholder="Enter email address" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-gray-700">പാസ്‌വേഡ് (രണ്ട് തവണ നൽകുക)</label>
-                    <input type="password" id="reg-pass1" placeholder="പാസ്‌വേഡ്" required class="w-full p-2 border rounded mt-1 mb-2">
-                    <input type="password" id="reg-pass2" placeholder="പാസ്‌വേഡ് വീണ്ടും നൽകുക" required class="w-full p-2 border rounded mt-1">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="reg-pass1" required placeholder="Password" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="reg-pass2" required placeholder="Re-enter password" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-700 text-white p-2 rounded hover:bg-emerald-800">റീജിസ്റ്റർ ചെയ്യുക</button>
+
+                <button type="submit" class="w-full mt-6 py-3.5 theme-gradient text-white font-semibold btn-capsule shadow-lg flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <span>Register Now</span>
+                </button>
             </form>
         </div>
 
+        <!-- Dashboard View (Initially Hidden) -->
+        <div id="dashboard-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl w-full hidden border border-gray-100">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Alumni Dashboard</h2>
+                    <p id="welcome-user-text" class="text-sm text-gray-500">Welcome back!</p>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 p-4 card-panel mb-6 flex items-start space-x-3">
+                <i class="fa-solid fa-circle-info text-[#4b7bec] text-xl mt-0.5"></i>
+                <div>
+                    <h4 class="font-semibold text-blue-900">Account Status: Pending Approval</h4>
+                    <p class="text-sm text-blue-700 mt-1">Your registration is currently under review by the administrator. Once approved, full portal access will be granted.</p>
+                </div>
+            </div>
+
+            <button id="logout-btn" class="w-full py-3.5 bg-rose-500 text-white font-semibold btn-capsule shadow-lg hover:bg-rose-600 transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Custom App-Native Modal / Toast Container -->
+    <div id="custom-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-[30px] p-6 max-w-sm w-full shadow-2xl text-center transform transition-all scale-95 opacity-0 duration-300" id="modal-box">
+            <div id="modal-icon-container" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl text-white mb-4 shadow-md">
+                <!-- Dynamic Icon -->
+            </div>
+            <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-2">Notification</h3>
+            <p id="modal-message" class="text-gray-600 text-sm mb-6 leading-relaxed">Message here...</p>
+            <button id="modal-close-btn" class="w-full py-3 theme-gradient text-white font-semibold btn-capsule shadow-md">OK</button>
+        </div>
     </div>
 
-    <!-- Firebase SDKs & App Logic -->
+    <!-- Firebase SDKs & Application Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // നിങ്ങളുടെ ഒറിജിനൽ ഫയർബേസ് കോൺഫിഗറേഷൻ
         const firebaseConfig = {
             apiKey: "AIzaSyDdJYaS0lNbedp_C_ks-BSNxAT4BubK8N8",
             authDomain: "fahmapp.firebaseapp.com",
@@ -69,7 +181,76 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // രജിസ്ട്രേഷൻ ഹാൻഡ്ലർ
+        // Custom Modal UI Handler
+        function showModal(title, message, type = 'success', callback = null) {
+            const modal = document.getElementById('custom-modal');
+            const modalBox = document.getElementById('modal-box');
+            const iconContainer = document.getElementById('modal-icon-container');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+
+            if (type === 'success') {
+                iconContainer.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl text-white mb-4 shadow-md bg-[#05c46b]';
+                iconContainer.innerHTML = '<i class="fa-solid fa-check"></i>';
+            } else {
+                iconContainer.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl text-white mb-4 shadow-md bg-[#fc5c65]';
+                iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalBox.classList.remove('scale-95', 'opacity-0');
+                modalBox.classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            const closeBtn = document.getElementById('modal-close-btn');
+            // Remove previous event listeners
+            const newBtn = closeBtn.cloneNode(true);
+            closeBtn.parentNode.replaceChild(newBtn, closeBtn);
+
+            newBtn.addEventListener('click', () => {
+                modalBox.classList.remove('scale-100', 'opacity-100');
+                modalBox.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    if (callback) callback();
+                }, 200);
+            });
+        }
+
+        // Advanced Keyboard Navigation (Enter key mimics Tab key)
+        document.querySelectorAll('form input').forEach((input, index, inputs) => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && input.type !== 'submit') {
+                    e.preventDefault();
+                    const nextInput = inputs[index + 1];
+                    if (nextInput) {
+                        nextInput.focus();
+                    }
+                }
+            });
+        });
+
+        // Session Persistence & Auth State Observer
+        onAuthStateChanged(auth, async (user) => {
+            const regSection = document.getElementById('register-section');
+            const dashSection = document.getElementById('dashboard-section');
+            const navActions = document.getElementById('nav-actions');
+
+            if (user) {
+                localStorage.setItem('fahm_authenticated', 'true');
+                regSection.classList.add('hidden');
+                dashSection.classList.remove('hidden');
+                navActions.innerHTML = `<span class="text-sm bg-white/10 px-3 py-1 rounded-full"><i class="fa-solid fa-user-circle mr-1"></i> ${user.email}</span>`;
+            } else {
+                localStorage.removeItem('fahm_authenticated');
+                dashSection.classList.add('hidden');
+                regSection.classList.remove('hidden');
+                navActions.innerHTML = '';
+            }
+        });
+
+        // Registration Handler
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('reg-name').value;
@@ -79,7 +260,7 @@
             const pass2 = document.getElementById('reg-pass2').value;
 
             if (pass1 !== pass2) {
-                alert('പാസ്‌വേഡുകൾ ഒരേപോലെ ആയിരിക്കണം!');
+                showModal('Password Mismatch', 'Entered passwords do not match. Please check and try again.', 'error');
                 return;
             }
 
@@ -96,10 +277,27 @@
                     createdAt: new Date()
                 });
 
-                alert('രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി! അഡ്മിന്റെ അനുമതിക്ക് ശേഷം നിങ്ങൾക്ക് ലോഗിൻ ചെയ്യാം.');
-                document.getElementById('register-form').reset();
+                showModal('Registration Successful', 'Your account has been successfully created and is pending administrator approval.', 'success', () => {
+                    document.getElementById('register-form').reset();
+                });
             } catch (error) {
-                alert('എറർ: ' + error.message);
+                showModal('Registration Failed', error.message, 'error');
+            }
+        });
+
+        // Explicit Logout Handling with Instant Redirect
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            try {
+                localStorage.removeItem('fahm_authenticated');
+                sessionStorage.clear();
+                await signOut(auth);
+                // Instant UI state switch without manual reload
+                document.getElementById('dashboard-section').classList.add('hidden');
+                document.getElementById('register-section').classList.remove('hidden');
+                document.getElementById('nav-actions').innerHTML = '';
+                showModal('Logged Out', 'You have been securely logged out of your session.', 'success');
+            } catch (error) {
+                showModal('Logout Error', error.message, 'error');
             }
         });
     </script>
