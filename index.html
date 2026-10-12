@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAHM - Federation of Alumni of Al Hasanath Mampuzha</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-emerald-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">FAHM Alumni Portal</h1>
+            <div id="nav-auth" class="space-x-4">
+                <!-- Dynamic Auth Buttons -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 mt-6 max-w-2xl">
+        
+        <!-- Registration Form -->
+        <div id="register-section" class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-4 text-emerald-800">അലുമ്നി രജിസ്ട്രേഷൻ</h2>
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700">പൂർണ്ണമായ പേര്</label>
+                    <input type="text" id="reg-name" required class="w-full p-2 border rounded mt-1">
+                </div>
+                <div>
+                    <label class="block text-gray-700">മൊബൈൽ നമ്പർ</label>
+                    <input type="tel" id="reg-phone" required class="w-full p-2 border rounded mt-1">
+                </div>
+                <div>
+                    <label class="block text-gray-700">ഇമെയിൽ വിലാസം</label>
+                    <input type="email" id="reg-email" required class="w-full p-2 border rounded mt-1">
+                </div>
+                <div>
+                    <label class="block text-gray-700">പാസ്‌വേഡ് (രണ്ട് തവണ നൽകുക)</label>
+                    <input type="password" id="reg-pass1" placeholder="പാസ്‌വേഡ്" required class="w-full p-2 border rounded mt-1 mb-2">
+                    <input type="password" id="reg-pass2" placeholder="പാസ്‌വേഡ് വീണ്ടും നൽകുക" required class="w-full p-2 border rounded mt-1">
+                </div>
+                <button type="submit" class="w-full bg-emerald-700 text-white p-2 rounded hover:bg-emerald-800">റീജിസ്റ്റർ ചെയ്യുക</button>
+            </form>
+        </div>
+
+        <!-- Profile Update Section (Hidden initially) -->
+        <div id="profile-section" class="bg-white p-6 rounded-lg shadow-md hidden">
+            <h2 class="text-2xl font-bold mb-4 text-emerald-800">പ്രൊഫൈൽ അപ്ഡേറ്റ്</h2>
+            <form id="profile-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700">ഇറങ്ങിയ വർഷം (Batch)</label>
+                    <input type="text" id="prof-batch" required class="w-full p-2 border rounded mt-1">
+                </div>
+                <div>
+                    <label class="block text-gray-700">നിലവിലെ ജോലി / പ്രൊഫഷൻ</label>
+                    <input type="text" id="prof-job" required class="w-full p-2 border rounded mt-1">
+                </div>
+                <div>
+                    <label class="block text-gray-700">സ്ഥാപനം / സ്ഥലം</label>
+                    <input type="text" id="prof-workplace" required class="w-full p-2 border rounded mt-1">
+                </div>
+                <button type="submit" class="w-full bg-emerald-700 text-white p-2 rounded hover:bg-emerald-800">പ്രൊഫൈൽ സേവ് ചെയ്യുക</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // നിങ്ങളുടെ ഫയർബേസ് കോൺഫിഗറേഷൻ ഇവിടെ നൽകുക
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // രജിസ്ട്രേഷൻ ഹാൻഡ്ലർ
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const email = document.getElementById('reg-email').value;
+            const pass1 = document.getElementById('reg-pass1').value;
+            const pass2 = document.getElementById('reg-pass2').value;
+
+            if (pass1 !== pass2) {
+                alert('പാസ്‌വേഡുകൾ ഒരേപോലെ ആയിരിക്കണം!');
+                return;
+            }
+
+            try {
+                // Firebase Auth വഴി യൂസറെ ക്രിയേറ്റ് ചെയ്യുക
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass1);
+                const user = userCredential.user;
+
+                // Firestore-ൽ യൂസർ ഡാറ്റ സേവ് ചെയ്യുക (Status: Pending)
+                await setDoc(doc(db, "users", user.uid), {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    status: "pending",
+                    role: "user",
+                    createdAt: new Date()
+                });
+
+                alert('രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി! അഡ്മിന്റെ അനുമതിക്ക് ശേഷം നിങ്ങൾക്ക് ലോഗിൻ ചെയ്യാം.');
+                document.getElementById('register-form').reset();
+            } catch (error) {
+                alert('എറർ: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
