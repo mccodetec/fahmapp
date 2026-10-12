@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAHM Alumni Portal</title>
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1e3c72">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/graduation-cap.svg">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome 6.4.0 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -35,12 +42,21 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Top Navigation Bar -->
-    <nav class="theme-gradient text-white p-4 shadow-md flex justify-between items-center">
+    <!-- Top Navigation Bar with Logo and Install Button -->
+    <nav class="theme-gradient text-white p-4 shadow-md flex flex-wrap justify-between items-center gap-3">
         <div class="flex items-center space-x-3">
-            <i class="fa-solid fa-graduation-cap text-2xl"></i>
-            <h1 class="text-xl font-bold tracking-wide">FAHM Alumni Portal</h1>
+            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-xl shadow-inner">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1 class="text-lg md:text-xl font-bold tracking-wide">FAHM Alumni Portal</h1>
+                <p class="text-xs text-blue-200">Al Hasanath Mampuzha</p>
+            </div>
         </div>
+        <!-- PWA Install Button -->
+        <button id="install-btn" class="hidden px-4 py-2 bg-white text-[#1e3c72] text-xs font-bold btn-capsule shadow-md flex items-center space-x-1">
+            <i class="fa-solid fa-download"></i><span>Install App</span>
+        </button>
     </nav>
 
     <!-- Main Container -->
@@ -49,14 +65,14 @@
         <!-- Auth Container (Login / Register) -->
         <div id="auth-container" class="w-full max-w-md">
             
-            <!-- Login Form (Default View) -->
+            <!-- Login Form -->
             <div id="login-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl border border-gray-100">
                 <div class="flex items-center space-x-3 mb-6">
                     <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
                         <i class="fa-solid fa-right-to-bracket"></i>
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Portal Login</h2>
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-800">Portal Login</h2>
                         <p class="text-sm text-gray-500">Sign in as User or Admin</p>
                     </div>
                 </div>
@@ -81,14 +97,14 @@
                 </div>
             </div>
 
-            <!-- Registration Form (Hidden initially) -->
+            <!-- Registration Form -->
             <div id="register-section" class="bg-white p-6 md:p-8 card-capsule shadow-xl border border-gray-100 hidden">
                 <div class="flex items-center space-x-3 mb-6">
                     <div class="w-12 h-12 rounded-full theme-gradient flex items-center justify-center text-white text-xl shadow-md">
                         <i class="fa-solid fa-user-plus"></i>
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Alumni Registration</h2>
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-800">Alumni Registration</h2>
                         <p class="text-sm text-gray-500">Join FAHM Portal</p>
                     </div>
                 </div>
@@ -106,7 +122,7 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
                         <input type="email" id="reg-email" required placeholder="Enter email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2a5298]">
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <input type="password" id="reg-pass1" required placeholder="Password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none">
                         <input type="password" id="reg-pass2" required placeholder="Confirm" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none">
                     </div>
@@ -135,8 +151,8 @@
 
         <!-- Admin Dashboard -->
         <div id="admin-dashboard" class="bg-white p-6 md:p-8 card-capsule shadow-xl w-full hidden border border-gray-100">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Admin Panel - Pending Approvals</h2>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800">Admin Panel - Pending Approvals</h2>
                 <button id="admin-logout-btn" class="px-5 py-2 bg-rose-500 text-white text-sm font-semibold btn-capsule">Logout</button>
             </div>
             <div id="pending-users-list" class="space-y-3">
@@ -155,7 +171,7 @@
         </div>
     </div>
 
-    <!-- Firebase Script -->
+    <!-- Firebase Script & PWA Install Handler -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -175,6 +191,27 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // PWA Install Prompt Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.remove('hidden');
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        });
+
         function showModal(title, message, callback = null) {
             const modal = document.getElementById('custom-modal');
             document.getElementById('modal-title').innerText = title;
@@ -189,7 +226,6 @@
             });
         }
 
-        // Toggle between Login and Register views
         document.getElementById('show-register').addEventListener('click', () => {
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('register-section').classList.remove('hidden');
@@ -199,7 +235,6 @@
             document.getElementById('login-section').classList.remove('hidden');
         });
 
-        // Login Handler
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -211,7 +246,6 @@
             }
         });
 
-        // Registration Handler
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('reg-name').value;
@@ -240,7 +274,6 @@
             }
         });
 
-        // Auth State & Panel Routing
         onAuthStateChanged(auth, async (user) => {
             const authContainer = document.getElementById('auth-container');
             const userDash = document.getElementById('user-dashboard');
@@ -267,7 +300,6 @@
             }
         });
 
-        // Load Pending Users in Admin Panel
         async function loadPendingUsers() {
             const listContainer = document.getElementById('pending-users-list');
             listContainer.innerHTML = '<p class="text-gray-500 text-sm">Loading requests...</p>';
@@ -282,13 +314,13 @@
                     if (data.status === 'pending' && data.role !== 'admin') {
                         count++;
                         const div = document.createElement('div');
-                        div.className = 'bg-gray-50 p-4 border rounded-xl flex justify-between items-center';
+                        div.className = 'bg-gray-50 p-4 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3';
                         div.innerHTML = `
                             <div>
                                 <h4 class="font-bold text-gray-800">${data.name}</h4>
                                 <p class="text-xs text-gray-500">${data.email} | ${data.phone}</p>
                             </div>
-                            <button onclick="approveUser('${document.id}', '${data.name}', '${data.phone}')" class="px-4 py-2 bg-[#05c46b] text-white text-xs font-bold btn-capsule">Approve & WhatsApp</button>
+                            <button onclick="approveUser('${document.id}', '${data.name}', '${data.phone}')" class="w-full sm:w-auto px-4 py-2 bg-[#05c46b] text-white text-xs font-bold btn-capsule text-center">Approve & WhatsApp</button>
                         `;
                         listContainer.appendChild(div);
                     }
