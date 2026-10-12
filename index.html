@@ -42,7 +42,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Top Navigation Bar with Logo and Install Button -->
+    <!-- Top Navigation Bar -->
     <nav class="theme-gradient text-white p-4 shadow-md flex flex-wrap justify-between items-center gap-3">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-xl shadow-inner">
@@ -53,7 +53,6 @@
                 <p class="text-xs text-blue-200">Al Hasanath Mampuzha</p>
             </div>
         </div>
-        <!-- PWA Install Button -->
         <button id="install-btn" class="hidden px-4 py-2 bg-white text-[#1e3c72] text-xs font-bold btn-capsule shadow-md flex items-center space-x-1">
             <i class="fa-solid fa-download"></i><span>Install App</span>
         </button>
@@ -62,7 +61,7 @@
     <!-- Main Container -->
     <main class="flex-grow container mx-auto p-4 md:p-6 max-w-4xl flex items-center justify-center">
         
-        <!-- Auth Container (Login / Register) -->
+        <!-- Auth Container -->
         <div id="auth-container" class="w-full max-w-md">
             
             <!-- Login Form -->
@@ -191,7 +190,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // PWA Install Prompt Logic
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
 
@@ -309,8 +307,8 @@
                 listContainer.innerHTML = '';
                 let count = 0;
 
-                querySnapshot.forEach((document) => {
-                    const data = document.data();
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
                     if (data.status === 'pending' && data.role !== 'admin') {
                         count++;
                         const div = document.createElement('div');
@@ -320,7 +318,7 @@
                                 <h4 class="font-bold text-gray-800">${data.name}</h4>
                                 <p class="text-xs text-gray-500">${data.email} | ${data.phone}</p>
                             </div>
-                            <button onclick="approveUser('${document.id}', '${data.name}', '${data.phone}')" class="w-full sm:w-auto px-4 py-2 bg-[#05c46b] text-white text-xs font-bold btn-capsule text-center">Approve & WhatsApp</button>
+                            <button onclick="approveUser('${docSnap.id}', '${data.name}', '${data.phone}')" class="w-full sm:w-auto px-4 py-2 bg-[#05c46b] text-white text-xs font-bold btn-capsule text-center">Approve & WhatsApp</button>
                         `;
                         listContainer.appendChild(div);
                     }
