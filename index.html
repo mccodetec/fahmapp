@@ -43,7 +43,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Top Navigation Bar with Logo and Always Visible Install Button -->
+    <!-- Top Navigation Bar with Logo and Install Button -->
     <nav class="theme-gradient text-white p-4 shadow-md flex flex-wrap justify-between items-center gap-3">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-xl shadow-inner">
@@ -54,9 +54,9 @@
                 <p class="text-xs text-blue-200">Al Hasanath Mampuzha</p>
             </div>
         </div>
-        <!-- Install App Button (Always Visible) -->
-        <button id="install-btn" class="px-4 py-2 bg-white text-[#1e3c72] text-xs font-bold btn-capsule shadow-md flex items-center space-x-1 animate-pulse">
-            <i class="fa-solid fa-download"></i><span>Install App</span>
+        <!-- Install App Button (Hidden by default, shown via PWA prompt) -->
+        <button id="install-app-btn" class="px-4 py-2 bg-white text-[#1e3c72] text-xs font-bold btn-capsule shadow-md items-center space-x-1" style="display: none;" onclick="installFahmApp()">
+            <i class="fa-solid fa-download mr-1"></i><span>Install App</span>
         </button>
     </nav>
 
@@ -172,7 +172,7 @@
         </div>
     </div>
 
-    <!-- Firebase Script & PWA Handler -->
+    <!-- Firebase Script & PWA Install Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -200,22 +200,33 @@
         }
 
         let deferredPrompt;
-        const installBtn = document.getElementById('install-btn');
-
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            const installBtn = document.getElementById('install-app-btn');
+            if (installBtn) installBtn.style.display = 'inline-flex';
         });
 
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            } else {
-                // ബ്രൗസർ ഓട്ടോമാറ്റിക് പ്രോംപ്റ്റ് തന്നില്ലെങ്കിൽ ക്രോം മെനു ഓപ്പൺ ചെയ്യാൻ നിർദ്ദേശം നൽകും
-                alert('To install this app on your phone, tap the three dots (menu) at the top right of your browser and select "Install app" or "Add to Home screen".');
+        window.installFahmApp = async function() {
+            if (!deferredPrompt) {
+                showModal('Info', 'App is already installed or your browser does not support direct installation.');
+                return;
             }
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            const installBtn = document.getElementById('install-app-btn');
+            if (installBtn) installBtn.style.display = 'none';
+        };
+
+        window.addEventListener('appinstalled', () => {
+            showModal('Success', 'App installed successfully!');
+            deferredPrompt = null;
+            const installBtn = document.getElementById('install-app-btn');
+            if (installBtn) installBtn.style.display = 'none';
         });
 
         function showModal(title, message, callback = null) {
