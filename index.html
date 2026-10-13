@@ -43,7 +43,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Top Navigation Bar with Logo and Install Button -->
+    <!-- Top Navigation Bar with Logo and Always Visible Install Button -->
     <nav class="theme-gradient text-white p-4 shadow-md flex flex-wrap justify-between items-center gap-3">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-xl shadow-inner">
@@ -54,8 +54,8 @@
                 <p class="text-xs text-blue-200">Al Hasanath Mampuzha</p>
             </div>
         </div>
-        <!-- Install App Button -->
-        <button id="install-btn" class="hidden px-4 py-2 bg-white text-[#1e3c72] text-xs font-bold btn-capsule shadow-md flex items-center space-x-1 animate-pulse">
+        <!-- Install App Button (Always Visible) -->
+        <button id="install-btn" class="px-4 py-2 bg-white text-[#1e3c72] text-xs font-bold btn-capsule shadow-md flex items-center space-x-1 animate-pulse">
             <i class="fa-solid fa-download"></i><span>Install App</span>
         </button>
     </nav>
@@ -63,7 +63,7 @@
     <!-- Main Container -->
     <main class="flex-grow container mx-auto p-4 md:p-6 max-w-4xl flex items-center justify-center">
         
-        <!-- Auth Container (Login / Register) -->
+        <!-- Auth Container -->
         <div id="auth-container" class="w-full max-w-md">
             
             <!-- Login Form -->
@@ -172,7 +172,7 @@
         </div>
     </div>
 
-    <!-- Firebase Script & PWA Service Worker Registration -->
+    <!-- Firebase Script & PWA Handler -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -192,12 +192,10 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Service Worker Registration for PWA
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then((reg) => console.log('ServiceWorker registered!', reg))
-                    .catch((err) => console.log('ServiceWorker registration failed: ', err));
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
             });
         }
 
@@ -207,17 +205,16 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.classList.remove('hidden');
         });
 
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installBtn.classList.add('hidden');
-                }
                 deferredPrompt = null;
+            } else {
+                // ബ്രൗസർ ഓട്ടോമാറ്റിക് പ്രോംപ്റ്റ് തന്നില്ലെങ്കിൽ ക്രോം മെനു ഓപ്പൺ ചെയ്യാൻ നിർദ്ദേശം നൽകും
+                alert('To install this app on your phone, tap the three dots (menu) at the top right of your browser and select "Install app" or "Add to Home screen".');
             }
         });
 
